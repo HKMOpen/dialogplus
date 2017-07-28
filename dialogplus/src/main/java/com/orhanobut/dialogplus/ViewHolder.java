@@ -4,97 +4,117 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 public class ViewHolder implements Holder {
 
-  private static final int INVALID = -1;
+    private static final int INVALID = -1;
 
-  private int backgroundResource;
+    private int backgroundResource;
 
-  private ViewGroup headerContainer;
-  private View headerView;
+    private ViewGroup headerContainer;
+    private View headerView;
 
-  private ViewGroup footerContainer;
-  private View footerView;
+    private ViewGroup footerContainer;
+    private View footerView;
 
-  private View.OnKeyListener keyListener;
+    private View.OnKeyListener keyListener;
 
-  private View contentView;
-  private int viewResourceId = INVALID;
+    private View contentView;
+    private int viewResourceId = INVALID;
+    private boolean enableOverlayBackground = true;
 
-  public ViewHolder(int viewResourceId) {
-    this.viewResourceId = viewResourceId;
-  }
-
-  public ViewHolder(View contentView) {
-    this.contentView = contentView;
-  }
-
-  @Override public void addHeader(View view) {
-    if (view == null) {
-      return;
+    public ViewHolder(int viewResourceId) {
+        this.viewResourceId = viewResourceId;
     }
-    headerContainer.addView(view);
-    headerView = view;
-  }
 
-  @Override public void addFooter(View view) {
-    if (view == null) {
-      return;
+    public ViewHolder(View contentView) {
+        this.contentView = contentView;
     }
-    footerContainer.addView(view);
-    footerView = view;
-  }
 
-  @Override public void setBackgroundResource(int colorResource) {
-    this.backgroundResource = colorResource;
-  }
-
-  @Override public View getView(LayoutInflater inflater, ViewGroup parent) {
-    View view = inflater.inflate(R.layout.dialog_view, parent, false);
-    View outMostView = view.findViewById(R.id.dialogplus_outmost_container);
-    outMostView.setBackgroundResource(backgroundResource);
-    ViewGroup contentContainer = (ViewGroup) view.findViewById(R.id.dialogplus_view_container);
-    contentContainer.setOnKeyListener(new View.OnKeyListener() {
-      @Override public boolean onKey(View v, int keyCode, KeyEvent event) {
-        if (keyListener == null) {
-          throw new NullPointerException("keyListener should not be null");
+    @Override
+    public void addHeader(View view) {
+        if (view == null) {
+            return;
         }
-        return keyListener.onKey(v, keyCode, event);
-      }
-    });
-    addContent(inflater, parent, contentContainer);
-    headerContainer = (ViewGroup) view.findViewById(R.id.dialogplus_header_container);
-    footerContainer = (ViewGroup) view.findViewById(R.id.dialogplus_footer_container);
-    return view;
-  }
-
-  private void addContent(LayoutInflater inflater, ViewGroup parent, ViewGroup container) {
-    if (viewResourceId != INVALID) {
-      contentView = inflater.inflate(viewResourceId, parent, false);
-    } else {
-      ViewGroup parentView = (ViewGroup) contentView.getParent();
-      if (parentView != null) {
-        parentView.removeView(contentView);
-      }
+        headerContainer.addView(view);
+        headerView = view;
     }
 
-    container.addView(contentView);
-  }
+    @Override
+    public void addFooter(View view) {
+        if (view == null) {
+            return;
+        }
+        footerContainer.addView(view);
+        footerView = view;
+    }
 
-  @Override public void setOnKeyListener(View.OnKeyListener keyListener) {
-    this.keyListener = keyListener;
-  }
+    @Override
+    public void setBackgroundResource(int colorResource) {
+        this.backgroundResource = colorResource;
+    }
 
-  @Override public View getInflatedView() {
-    return contentView;
-  }
+    @Override
+    public void setOverlayBackgroundEnable(boolean enableOverlayBackground) {
+        this.enableOverlayBackground = enableOverlayBackground;
+    }
 
-  @Override public View getHeader() {
-    return headerView;
-  }
+    @Override
+    public View getView(LayoutInflater inflater, ViewGroup parent) {
+        View view = inflater.inflate(R.layout.dialog_view, parent, false);
+        View outMostView = view.findViewById(R.id.dialogplus_outmost_container);
+        if (enableOverlayBackground) {
+            outMostView.setBackgroundResource(backgroundResource);
+        } else {
+            outMostView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        }
+        ViewGroup contentContainer = (ViewGroup) view.findViewById(R.id.dialogplus_view_container);
+        contentContainer.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyListener == null) {
+                    throw new NullPointerException("keyListener should not be null");
+                }
+                return keyListener.onKey(v, keyCode, event);
+            }
+        });
+        addContent(inflater, parent, contentContainer);
+        headerContainer = (ViewGroup) view.findViewById(R.id.dialogplus_header_container);
+        footerContainer = (ViewGroup) view.findViewById(R.id.dialogplus_footer_container);
+        return view;
+    }
 
-  @Override public View getFooter() {
-    return footerView;
-  }
+    private void addContent(LayoutInflater inflater, ViewGroup parent, ViewGroup container) {
+        if (viewResourceId != INVALID) {
+            contentView = inflater.inflate(viewResourceId, parent, false);
+        } else {
+            ViewGroup parentView = (ViewGroup) contentView.getParent();
+            if (parentView != null) {
+                parentView.removeView(contentView);
+            }
+        }
+
+        container.addView(contentView);
+    }
+
+    @Override
+    public void setOnKeyListener(View.OnKeyListener keyListener) {
+        this.keyListener = keyListener;
+    }
+
+    @Override
+    public View getInflatedView() {
+        return contentView;
+    }
+
+    @Override
+    public View getHeader() {
+        return headerView;
+    }
+
+    @Override
+    public View getFooter() {
+        return footerView;
+    }
 }

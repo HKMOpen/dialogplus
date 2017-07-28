@@ -50,7 +50,12 @@ public class GridHolder implements HolderAdapter, AdapterView.OnItemClickListene
     this.backgroundResource = colorResource;
   }
 
-  @Override public View getView(LayoutInflater inflater, ViewGroup parent) {
+    @Override
+    public void setOverlayBackgroundEnable(boolean enableOverlayBackground) {
+
+    }
+
+    @Override public View getView(LayoutInflater inflater, ViewGroup parent) {
     View view = inflater.inflate(R.layout.dialog_grid, parent, false);
     View outMostView = view.findViewById(R.id.dialogplus_outmost_container);
     outMostView.setBackgroundResource(backgroundResource);
