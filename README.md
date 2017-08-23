@@ -21,7 +21,7 @@ DialogPlus
 
 ### Gradle
 ```groovy
-compile 'com.orhanobut:dialogplus:1.11@aar'
+compile 'com.github.Daniil-Pavenko:dialogplus:1.17'
 ```
 
 ### Usage
@@ -44,7 +44,7 @@ dialog.show();
 ### More options
 Enable expand animation same as Android L share dialog
 ```java
-.setExpanded(true) // default is false, only works for grid and list
+.setExpanded(true) // default is false, only works for classes who extends ViewGroup
 ```
 Set expand animation default height
 ```java
@@ -153,6 +153,11 @@ View view = dialogPlus.getHeaderView();
 
     }
 })
+```
+
+- Disable back overlay, for handle click outside of dialog
+```java
+.setEnableOverlayBackground(false) //default is true
 ```
 
 - Cancel Listener, triggered when the dialog is cancelled by back button or clicking outside

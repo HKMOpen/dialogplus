@@ -5,13 +5,14 @@ import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.widget.AbsListView;
 import android.widget.FrameLayout;
 
 class ExpandTouchListener implements View.OnTouchListener {
 
-  private final AbsListView absListView;
+  private final ViewGroup absListView;
   private final View contentContainer;
 
   /**
@@ -59,7 +60,12 @@ class ExpandTouchListener implements View.OnTouchListener {
     return new ExpandTouchListener(context, listView, container, gravity, displayHeight, defaultContentHeight);
   }
 
-  private ExpandTouchListener(Context context, AbsListView absListView, View container, int gravity,
+  public static ExpandTouchListener newListener(Context context, ViewGroup listView, View container,
+                                                int gravity, int displayHeight, int defaultContentHeight) {
+    return new ExpandTouchListener(context, listView, container, gravity, displayHeight, defaultContentHeight);
+  }
+
+  private ExpandTouchListener(Context context, ViewGroup absListView, View container, int gravity,
                               int displayHeight, int defaultContentHeight) {
     this.absListView = absListView;
     this.contentContainer = container;

@@ -238,7 +238,7 @@ public class DialogPlusBuilder {
         return this;
     }
 
-    public DialogPlusBuilder setEnableOverlayNackground(boolean enableOverlayBackground) {
+    public DialogPlusBuilder setEnableOverlayBackground(boolean enableOverlayBackground) {
         this.enableOverlayBackground = enableOverlayBackground;
         return this;
     }

@@ -9,7 +9,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
@@ -212,13 +211,13 @@ public class DialogPlus {
         }
 
         final View view = holder.getInflatedView();
-        if (!(view instanceof AbsListView)) {
+        if (!(view instanceof ViewGroup)) {
             return;
         }
-        final AbsListView absListView = (AbsListView) view;
+        final ViewGroup viewGroup = (ViewGroup) view;
 
         view.setOnTouchListener(ExpandTouchListener.newListener(
-                activity, absListView, contentContainer, gravity, displayHeight, defaultHeight
+                activity, viewGroup, contentContainer, gravity, displayHeight, defaultHeight
         ));
     }
 
