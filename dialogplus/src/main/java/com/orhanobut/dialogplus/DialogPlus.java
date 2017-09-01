@@ -140,6 +140,19 @@ public class DialogPlus {
     }
 
     /**
+     * if we are dismissing or decorView is doing something else
+     * we should post to show another one
+     */
+    public void postShow() {
+        decorView.post(new Runnable() {
+            @Override
+            public void run() {
+                show();
+            }
+        });
+    }
+
+    /**
      * It basically check if the rootView contains the dialog plus view.
      *
      * @return true if it contains
@@ -184,6 +197,52 @@ public class DialogPlus {
         });
         contentContainer.startAnimation(outAnim);
         isDismissing = true;
+    }
+
+    /**
+     * run dismiss() without outAnim
+     */
+    public void dismiss(boolean isImmediately) {
+        if (isDismissing) {
+            return;
+        }
+        if (isImmediately) {
+            isDismissing = true;
+            postDismiss();
+            return;
+        }
+
+        outAnim.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                postDismiss();
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        contentContainer.startAnimation(outAnim);
+        isDismissing = true;
+    }
+
+    private void postDismiss() {
+        decorView.post(new Runnable() {
+            @Override
+            public void run() {
+                decorView.removeView(rootView);
+                isDismissing = false;
+                if (onDismissListener != null) {
+                    onDismissListener.onDismiss(DialogPlus.this);
+                }
+            }
+        });
     }
 
     @SuppressWarnings("unused")
